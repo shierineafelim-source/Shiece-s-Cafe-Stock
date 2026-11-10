@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shiece's Cafe Stock</title>
+<style>
+:root{--coffee:#573b2b;--coffee2:#76543e;--cream:#f7f2e9;--paper:#fffdf9;--ink:#302820;--muted:#8b8176;--line:#eee6dc;--gold:#c79a5b;--green:#4f8064;--red:#bd6657;--shadow:0 12px 35px rgba(67,45,29,.07)}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font:14px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+.app{display:flex;min-height:100vh}.sidebar{width:248px;background:#35271f;color:#f8f0e6;padding:28px 18px;position:fixed;inset:0 auto 0 0;display:flex;flex-direction:column;z-index:5}
+.brand{padding:0 12px 28px;border-bottom:1px solid #ffffff20}.brand-mark{width:42px;height:42px;border-radius:14px;background:#c79a5b;color:#35271f;display:grid;place-items:center;font-size:22px;margin-bottom:13px}.brand h1{font-size:18px;letter-spacing:.7px;margin:0}.brand p{color:#c8b9aa;font-size:11px;letter-spacing:1.7px;margin:4px 0 0}
+.nav-label{font-size:10px;color:#a99583;letter-spacing:1.8px;font-weight:700;padding:25px 12px 10px}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#d9cfc4;text-align:left;padding:11px 12px;border-radius:10px;display:flex;gap:12px;align-items:center;font:inherit;cursor:pointer;transition:.2s}.nav button:hover,.nav button.active{background:#ffffff17;color:#fff}.nav button.active{box-shadow:inset 3px 0 #d4a86b}.ico{width:20px;text-align:center;font-size:16px}.side-bottom{margin-top:auto;padding:15px 12px;color:#b8a99a;font-size:11px;border-top:1px solid #ffffff20}
+main{margin-left:248px;width:calc(100% - 248px);padding:30px 36px 48px;max-width:1600px}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px}.eyebrow{color:var(--muted);font-size:12px}.topbar h2{font-size:25px;margin:3px 0 0;letter-spacing:-.5px}.profile{display:flex;align-items:center;gap:10px;background:var(--paper);border:1px solid var(--line);padding:8px 12px;border-radius:13px}.avatar{width:32px;height:32px;border-radius:10px;background:#ead9c2;color:var(--coffee);display:grid;place-items:center;font-weight:800}.profile small{display:block;color:var(--muted);font-size:10px}
+.page{display:none}.page.active{display:block}.welcome{display:flex;justify-content:space-between;align-items:end;margin:0 0 20px}.welcome h3{font-size:19px;margin:0}.welcome p{margin:4px 0 0;color:var(--muted)}.date{font-size:12px;color:var(--muted);background:#fffaf2;padding:8px 12px;border-radius:9px;border:1px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:20px}.card,.panel{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}.stat{padding:18px 19px;position:relative;overflow:hidden}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}.stat-icon{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:#f3e9dc;font-size:17px}.stat strong{font-size:29px;display:block;margin:12px 0 2px;letter-spacing:-1px}.stat small{color:var(--muted);font-size:11px}.stat .accent{color:var(--green)}.stat.warning .stat-icon{background:#fae9e4}.stat.warning strong{color:var(--red)}
+.grid-two{display:grid;grid-template-columns:1.35fr 1fr;gap:18px;margin-bottom:18px}.panel{padding:20px}.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.panel-head h3{font-size:14px;margin:0}.panel-head span{color:var(--muted);font-size:11px}.chart-wrap{height:220px;position:relative}.chart-wrap canvas{width:100%;height:100%}.legend{display:flex;gap:16px;color:var(--muted);font-size:11px;margin-top:5px}.dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;background:var(--gold)}.dot.two{background:#9a765c}
+.stock-list{display:grid;gap:15px}.stock-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.stock-row b{font-size:12px}.stock-row small{display:block;color:var(--muted);font-size:10px}.bar{grid-column:1/-1;height:7px;border-radius:20px;background:#f0e9df;overflow:hidden}.bar i{display:block;height:100%;border-radius:20px;background:var(--gold)}.stock-row:nth-child(2) .bar i{background:#9b765c}.stock-row:nth-child(3) .bar i{background:#6c8c70}.stock-row:nth-child(4) .bar i{background:#c58b64}
+.table-panel{margin-top:18px}.table-tools{display:flex;gap:10px;align-items:center}.search{border:1px solid var(--line);background:#fff;border-radius:9px;padding:9px 11px;font:inherit;min-width:190px;outline:none}.btn{border:0;border-radius:9px;padding:9px 13px;background:var(--coffee);color:#fff;font:600 12px inherit;cursor:pointer}.btn:hover{background:var(--coffee2)}.btn.light{background:#f2e9df;color:var(--coffee)}.btn.danger{background:#f8e8e4;color:#a94e43}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}th{text-align:left;color:var(--muted);font-size:10px;letter-spacing:.8px;font-weight:700;padding:12px 10px;border-bottom:1px solid var(--line)}td{padding:13px 10px;border-bottom:1px solid #f2ede7;font-size:12px}tr:last-child td{border-bottom:0}.item-name{font-weight:700}.sub{display:block;color:var(--muted);font-size:10px}.badge{display:inline-block;padding:4px 8px;border-radius:20px;font-size:10px;font-weight:700;background:#eaf2eb;color:#4e795b}.badge.low{background:#f9e9e5;color:#b05c4d}.badge.medium{background:#f7f0df;color:#a27c37}.actions{display:flex;gap:5px}.icon-btn{border:1px solid var(--line);background:#fff;border-radius:7px;padding:5px 8px;cursor:pointer}
+.section-title{margin:0 0 17px}.section-title h3{margin:0;font-size:19px}.section-title p{margin:4px 0 0;color:var(--muted)}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:11px;background:white;font:inherit;outline:none}.field.full{grid-column:1/-1}.form-actions{display:flex;gap:9px;margin-top:18px}.empty{text-align:center;color:var(--muted);padding:28px}
+.overlay{display:none;position:fixed;inset:0;background:#21170f70;z-index:10;align-items:center;justify-content:center;padding:18px}.overlay.show{display:flex}.modal{width:min(520px,100%);background:var(--paper);border-radius:18px;padding:23px;box-shadow:0 20px 70px #0003}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modal-head h3{margin:0}.close{border:0;background:#f2e9df;border-radius:8px;padding:6px 10px;cursor:pointer}
+.toast{position:fixed;bottom:22px;right:22px;background:#35271f;color:white;padding:12px 17px;border-radius:10px;box-shadow:var(--shadow);opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none;z-index:20}.toast.show{opacity:1;transform:translateY(0)}
+.mobile-menu{display:none}
+@media(max-width:1000px){.sidebar{width:215px}main{margin-left:215px;width:calc(100% - 215px);padding:25px 22px}.cards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:700px){.sidebar{width:75px;padding:18px 10px}.brand{padding:0 6px 20px}.brand h1,.brand p,.nav-label,.nav button span:not(.ico),.side-bottom{display:none}.brand-mark{margin:auto}.nav{margin-top:20px}.nav button{justify-content:center;padding:12px 5px}.ico{font-size:19px}main{margin-left:75px;width:calc(100% - 75px);padding:20px 14px}.topbar h2{font-size:20px}.profile div:last-child{display:none}.grid-two{grid-template-columns:1fr}.cards{gap:10px}.stat{padding:14px}.stat strong{font-size:24px}.welcome{align-items:start;gap:8px;flex-direction:column}.table-tools{flex-wrap:wrap}.search{min-width:0;flex:1}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand"><div class="brand-mark">☕</div><h1>SHIECE'S CAFE</h1><p>STOCK MANAGEMENT</p></div>
+  <div class="nav-label">MENU UTAMA</div>
+  <nav class="nav">
+    <button class="active" data-page="dashboard"><span class="ico">▦</span><span>Dashboard</span></button>
+    <button data-page="barang"><span class="ico">▤</span><span>Data Barang</span></button>
+    <button data-page="masuk"><span class="ico">↙</span><span>Barang Masuk</span></button>
+    <button data-page="keluar"><span class="ico">↗</span><span>Barang Keluar</span></button>
+    <button data-page="stok"><span class="ico">▥</span><span>Stok Gudang</span></button>
+    <button data-page="persetujuan"><span class="ico">✓</span><span>Persetujuan</span></button>
+    <button data-page="laporan"><span class="ico">▧</span><span>Laporan</span></button>
+    <button data-page="riwayat"><span class="ico">◷</span><span>Riwayat</span></button>
+    <button data-page="pengguna"><span class="ico">♙</span><span>Pengguna</span></button>
+  </nav>
+  <div class="side-bottom">© 2026 Shiece's Cafe<br>Sistem Informasi Gudang</div>
+</aside>
+<main>
+  <header class="topbar"><div><div class="eyebrow">SISTEM INFORMASI GUDANG</div><h2 id="pageTitle">Dashboard Utama</h2></div><div class="profile"><div class="avatar">A</div><div><b>Admin Gudang</b><small>Administrator</small></div></div></header>
+  <section class="page active" id="dashboard">
+    <div class="welcome"><div><h3>Selamat datang, Admin! ☕</h3><p>Berikut ringkasan persediaan Shiece's Cafe hari ini.</p></div><div class="date" id="today"></div></div>
+    <div class="cards">
+      <div class="card stat"><div class="stat-top">TOTAL BARANG <span class="stat-icon">▤</span></div><strong id="totalCount">125</strong><small>Jenis barang terdaftar</small></div>
+      <div class="card stat"><div class="stat-top">BARANG MASUK <span class="stat-icon">↙</span></div><strong id="inCount">25</strong><small class="accent">Transaksi masuk</small></div>
+      <div class="card stat"><div class="stat-top">BARANG KELUAR <span class="stat-icon">↗</span></div><strong id="outCount">18</strong><small>Transaksi keluar</small></div>
+      <div class="card stat warning"><div class="stat-top">STOK MENIPIS <span class="stat-icon">⚠</span></div><strong id="lowCount">5</strong><small>Perlu segera diperiksa</small></div>
+    </div>
+    <div class="grid-two">
+      <div class="panel"><div class="panel-head"><h3>Grafik Stok Gudang</h3><span>Ringkasan kategori</span></div><div class="chart-wrap"><canvas id="stockChart"></canvas></div><div class="legend"><span><i class="dot"></i>Jumlah stok</span><span><i class="dot two"></i>Batas minimum</span></div></div>
+      <div class="panel"><div class="panel-head"><h3>Daftar Stok Barang</h3><span>Stok terkini</span></div><div class="stock-list" id="stockHighlights"></div></div>
+    </div>
+    <div class="panel table-panel"><div class="panel-head"><h3>Barang Terbaru</h3><button class="btn light" onclick="navigate('barang')">Lihat semua →</button></div><div class="table-wrap"><table><thead><tr><th>NAMA BARANG</th><th>KATEGORI</th><th>STOK</th><th>STATUS</th></tr></thead><tbody id="recentTable"></tbody></table></div></div>
+  </section>
+  <section class="page" id="barang">
+    <div class="section-title"><h3>Data Barang</h3><p>Kelola seluruh data persediaan barang gudang.</p></div>
+    <div class="panel table-panel" style="margin-top:0"><div class="panel-head"><div class="table-tools"><input class="search" id="searchItems" placeholder="Cari nama barang..."><select class="search" id="filterCategory"><option value="">Semua kategori</option><option>Bahan Baku</option><option>Minuman</option><option>Kemasan</option><option>Lainnya</option></select></div><button class="btn" onclick="openModal()">＋ Tambah Barang</button></div><div class="table-wrap"><table><thead><tr><th>KODE</th><th>NAMA BARANG</th><th>KATEGORI</th><th>STOK</th><th>MINIMUM</th><th>STATUS</th><th>AKSI</th></tr></thead><tbody id="itemsTable"></tbody></table></div></div>
+  </section>
+  <section class="page" id="masuk">
+    <div class="section-title"><h3>Barang Masuk</h3><p>Catat penerimaan barang ke gudang.</p></div>
+    <div class="panel"><form id="inForm"><div class="form-grid"><div class="field"><label>Nama barang</label><select id="inItem" required></select></div><div class="field"><label>Jumlah masuk</label><input id="inQty" type="number" min="1" required placeholder="Contoh: 10"></div><div class="field"><label>Tanggal</label><input id="inDate" type="date" required></div><div class="field"><label>Keterangan</label><input id="inNote" placeholder="Contoh: Pembelian supplier"></div></div><div class="form-actions"><button class="btn">Simpan Barang Masuk</button></div></form></div>
+    <div class="panel table-panel"><div class="panel-head"><h3>Riwayat Barang Masuk</h3></div><div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>BARANG</th><th>JUMLAH</th><th>KETERANGAN</th></tr></thead><tbody id="inTable"></tbody></table></div></div>
+  </section>
+  <section class="page" id="keluar">
+    <div class="section-title"><h3>Barang Keluar</h3><p>Catat penggunaan atau pengeluaran barang dari gudang.</p></div>
+    <div class="panel"><form id="outForm"><div class="form-grid"><div class="field"><label>Nama barang</label><select id="outItem" required></select></div><div class="field"><label>Jumlah keluar</label><input id="outQty" type="number" min="1" required placeholder="Contoh: 3"></div><div class="field"><label>Tanggal</label><input id="outDate" type="date" required></div><div class="field"><label>Keterangan</label><input id="outNote" placeholder="Contoh: Pemakaian harian"></div></div><div class="form-actions"><button class="btn">Simpan Barang Keluar</button></div></form></div>
+    <div class="panel table-panel"><div class="panel-head"><h3>Riwayat Barang Keluar</h3></div><div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>BARANG</th><th>JUMLAH</th><th>KETERANGAN</th></tr></thead><tbody id="outTable"></tbody></table></div></div>
+  </section>
+  <section class="page" id="stok">
+    <div class="section-title"><h3>Stok Gudang</h3><p>Pantau ketersediaan dan batas minimum setiap barang.</p></div>
+    <div class="panel table-panel" style="margin-top:0"><div class="panel-head"><h3>Posisi Stok Saat Ini</h3><input class="search" id="stockSearch" placeholder="Cari barang..."></div><div class="table-wrap"><table><thead><tr><th>NAMA BARANG</th><th>KATEGORI</th><th>STOK TERSEDIA</th><th>BATAS MINIMUM</th><th>STATUS</th></tr></thead><tbody id="stockTable"></tbody></table></div></div>
+  </section>
+  <section class="page" id="persetujuan">
+    <div class="section-title"><h3>Persetujuan</h3><p>Daftar permintaan transaksi yang menunggu persetujuan admin.</p></div>
+    <div class="panel"><div class="empty">✓ Tidak ada permintaan yang menunggu persetujuan.</div></div>
+  </section>
+  <section class="page" id="laporan">
+    <div class="section-title"><h3>Laporan Gudang</h3><p>Ringkasan data persediaan yang dapat diunduh.</p></div>
+    <div class="cards"><div class="card stat"><div class="stat-top">TOTAL JENIS BARANG</div><strong id="reportTotal">125</strong><small>Data terdaftar</small></div><div class="card stat"><div class="stat-top">TOTAL STOK UNIT</div><strong id="reportUnits">—</strong><small>Seluruh barang</small></div></div>
+    <div class="panel"><div class="panel-head"><h3>Ekspor Laporan Stok</h3></div><p style="color:var(--muted)">Unduh data stok barang dalam format CSV untuk dibuka di Excel atau spreadsheet.</p><button class="btn" onclick="exportCSV()">↓ Unduh Laporan CSV</button></div>
+  </section>
+  <section class="page" id="riwayat">
+    <div class="section-title"><h3>Riwayat Aktivitas</h3><p>Catatan transaksi barang masuk dan keluar.</p></div>
+    <div class="panel table-panel" style="margin-top:0"><div class="table-wrap"><table><thead><tr><th>TANGGAL</th><th>JENIS</th><th>NAMA BARANG</th><th>JUMLAH</th><th>KETERANGAN</th></tr></thead><tbody id="historyTable"></tbody></table></div></div>
+  </section>
+  <section class="page" id="pengguna">
+    <div class="section-title"><h3>Pengguna Sistem</h3><p>Informasi akun yang memiliki akses ke sistem gudang.</p></div>
+    <div class="panel"><div style="display:flex;align-items:center;gap:14px"><div class="avatar" style="width:48px;height:48px">A</div><div><b>Admin Gudang</b><div style="color:var(--muted);font-size:12px">admin@shiescafe.local · Administrator</div></div><span class="badge" style="margin-left:auto">Aktif</span></div></div>
+  </section>
+</main>
+</div>
+<div class="overlay" id="modal"><div class="modal"><div class="modal-head"><h3 id="modalTitle">Tambah Barang</h3><button class="close" onclick="closeModal()">✕</button></div><form id="itemForm"><div class="form-grid"><div class="field"><label>Kode barang</label><input id="code" required placeholder="BRG-006"></div><div class="field"><label>Nama barang</label><input id="name" required placeholder="Nama barang"></div><div class="field"><label>Kategori</label><select id="category"><option>Bahan Baku</option><option>Minuman</option><option>Kemasan</option><option>Lainnya</option></select></div><div class="field"><label>Jumlah stok</label><input id="qty" type="number" min="0" required></div><div class="field"><label>Stok minimum</label><input id="min" type="number" min="0" required></div><div class="field"><label>Satuan</label><select id="unit"><option>pcs</option><option>kg</option><option>liter</option><option>pack</option><option>dus</option></select></div></div><div class="form-actions"><button class="btn">Simpan</button><button type="button" class="btn light" onclick="closeModal()">Batal</button></div></form></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const seed=[
+{code:'BRG-001',name:'Biji Kopi Arabika',category:'Bahan Baku',qty:35,min:10,unit:'kg'},
+{code:'BRG-002',name:'Susu UHT',category:'Bahan Baku',qty:8,min:10,unit:'liter'},
+{code:'BRG-003',name:'Gula Aren',category:'Bahan Baku',qty:18,min:8,unit:'kg'},
+{code:'BRG-004',name:'Sirup Vanilla',category:'Bahan Baku',qty:6,min:8,unit:'botol'},
+{code:'BRG-005',name:'Cup Plastik 16 oz',category:'Kemasan',qty:120,min:40,unit:'pcs'},
+{code:'BRG-006',name:'Air Mineral',category:'Minuman',qty:42,min:15,unit:'dus'},
+{code:'BRG-007',name:'Cokelat Bubuk',category:'Bahan Baku',qty:4,min:8,unit:'kg'},
+{code:'BRG-008',name:'Sedotan',category:'Kemasan',qty:250,min:100,unit:'pcs'},
+{code:'BRG-009',name:'Teh Melati',category:'Bahan Baku',qty:16,min:6,unit:'pack'},
+{code:'BRG-010',name:'Tisu',category:'Lainnya',qty:7,min:10,unit:'pack'}
+];
+let items=JSON.parse(localStorage.getItem('shiece_items')||'null')||seed;
+let logs=JSON.parse(localStorage.getItem('shiece_logs')||'[]'), editing=null;
+const $=id=>document.getElementById(id);
+const save=()=>{localStorage.setItem('shiece_items',JSON.stringify(items));localStorage.setItem('shiece_logs',JSON.stringify(logs))};
+const fmtDate=d=>d?new Date(d+'T00:00:00').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'}):'-';
+const status=i=>i.qty<=i.min?'Menipis':i.qty<=i.min*1.5?'Perhatian':'Aman';
+const badge=i=>`<span class="badge ${status(i)==='Menipis'?'low':status(i)==='Perhatian'?'medium':''}">${status(i)}</span>`;
+function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),2300)}
+function navigate(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));const names={dashboard:'Dashboard Utama',barang:'Data Barang',masuk:'Barang Masuk',keluar:'Barang Keluar',stok:'Stok Gudang',persetujuan:'Persetujuan',laporan:'Laporan',riwayat:'Riwayat Aktivitas',pengguna:'Pengguna'};$('pageTitle').textContent=names[id];render();window.scrollTo(0,0)}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>navigate(b.dataset.page)));
+function render(){
+ const low=items.filter(i=>i.qty<=i.min).length,total=items.reduce((s,i)=>s+i.qty,0);
+ $('totalCount').textContent=items.length===10?125:items.length;$('lowCount').textContent=low;$('reportTotal').textContent=items.length;$('reportUnits').textContent=total.toLocaleString('id-ID');
+ $('inCount').textContent=25+logs.filter(l=>l.type==='Masuk').length;$('outCount').textContent=18+logs.filter(l=>l.type==='Keluar').length;
+ $('itemsTable').innerHTML=items.filter(i=>(i.name+' '+i.code).toLowerCase().includes(($('searchItems')?.value||'').toLowerCase())&&(!$('filterCategory')?.value||i.category===$('filterCategory').value)).map(i=>`<tr><td>${i.code}</td><td class="item-name">${i.name}<span class="sub">${i.unit}</span></td><td>${i.category}</td><td><b>${i.qty}</b> ${i.unit}</td><td>${i.min} ${i.unit}</td><td>${badge(i)}</td><td><div class="actions"><button class="icon-btn" onclick="editItem('${i.code}')">✎</button><button class="icon-btn" onclick="deleteItem('${i.code}')">⌫</button></div></td></tr>`).join('')||'<tr><td colspan="7" class="empty">Barang tidak ditemukan.</td></tr>';
+ $('stockTable').innerHTML=items.filter(i=>(i.name).toLowerCase().includes(($('stockSearch')?.value||'').toLowerCase())).map(i=>`<tr><td class="item-name">${i.name}</td><td>${i.category}</td><td><b>${i.qty}</b> ${i.unit}</td><td>${i.min} ${i.unit}</td><td>${badge(i)}</td></tr>`).join('');
+ $('recentTable').innerHTML=items.slice(0,5).map(i=>`<tr><td class="item-name">${i.name}</td><td>${i.category}</td><td>${i.qty} ${i.unit}</td><td>${badge(i)}</td></tr>`).join('');
+ $('stockHighlights').innerHTML=items.slice(0,4).map(i=>`<div class="stock-row"><div><b>${i.name}</b><small>${i.qty} ${i.unit} tersedia</small></div><b>${Math.round(i.qty/(Math.max(i.min*2,i.qty))*100)}%</b><div class="bar"><i style="width:${Math.min(100,i.qty/(Math.max(i.min*2,i.qty))*100)}%"></i></div></div>`).join('');
+ const options=items.map(i=>`<option value="${i.code}">${i.name} (${i.qty} ${i.unit})</option>`).join('');$('inItem').innerHTML=options;$('outItem').innerHTML=options;
+ const rows=logs.slice().reverse();$('inTable').innerHTML=rows.filter(l=>l.type==='Masuk').map(logRow).join('')||'<tr><td colspan="4" class="empty">Belum ada transaksi masuk.</td></tr>';$('outTable').innerHTML=rows.filter(l=>l.type==='Keluar').map(logRow).join('')||'<tr><td colspan="4" class="empty">Belum ada transaksi keluar.</td></tr>';
+ $('historyTable').innerHTML=rows.map(l=>`<tr><td>${fmtDate(l.date)}</td><td>${l.type}</td><td>${l.name}</td><td>${l.qty}</td><td>${l.note||'-'}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">Belum ada aktivitas.</td></tr>';
+ drawChart();
+}
+function logRow(l){return `<tr><td>${fmtDate(l.date)}</td><td>${l.name}</td><td>${l.qty}</td><td>${l.note||'-'}</td></tr>`}
+function openModal(item=null){editing=item?.code||null;$('modalTitle').textContent=item?'Edit Barang':'Tambah Barang';$('code').value=item?.code||`BRG-${String(items.length+1).padStart(3,'0')}`;$('code').disabled=!!item;$('name').value=item?.name||'';$('category').value=item?.category||'Bahan Baku';$('qty').value=item?.qty??0;$('min').value=item?.min??5;$('unit').value=item?.unit||'pcs';$('modal').classList.add('show')}
+function closeModal(){$('modal').classList.remove('show')}
+function editItem(code){const i=items.find(x=>x.code===code);if(i)openModal(i)}
+function deleteItem(code){if(confirm('Hapus barang ini dari data?')){items=items.filter(i=>i.code!==code);save();render();toast('Data barang dihapus.')}}
+$('itemForm').addEventListener('submit',e=>{e.preventDefault();const obj={code:$('code').value.trim(),name:$('name').value.trim(),category:$('category').value,qty:+$('qty').value,min:+$('min').value,unit:$('unit').value};if(editing){items=items.map(i=>i.code===editing?obj:i)}else{if(items.some(i=>i.code===obj.code)){toast('Kode barang sudah digunakan.');return}items.push(obj)}save();closeModal();render();toast('Data barang berhasil disimpan.')});
+function transaction(type){const code=$(type==='Masuk'?'inItem':'outItem').value,qty=+$((type==='Masuk'?'inQty':'outQty')).value,date=$(type==='Masuk'?'inDate':'outDate').value,note=$(type==='Masuk'?'inNote':'outNote').value;const item=items.find(i=>i.code===code);if(!item||qty<1)return;if(type==='Keluar'&&qty>item.qty){toast('Stok tidak mencukupi.');return}item.qty+=type==='Masuk'?qty:-qty;logs.push({type,code,name:item.name,qty,date,note});save();render();$(type==='Masuk'?'inForm':'outForm').reset();$(type==='Masuk'?'inDate':'outDate').value=new Date().toISOString().slice(0,10);toast(`Transaksi barang ${type.toLowerCase()} tersimpan.`)}
+$('inForm').addEventListener('submit',e=>{e.preventDefault();transaction('Masuk')});$('outForm').addEventListener('submit',e=>{e.preventDefault();transaction('Keluar')});
+$('searchItems').addEventListener('input',render);$('filterCategory').addEventListener('change',render);$('stockSearch').addEventListener('input',render);
+function exportCSV(){const rows=[['Kode','Nama Barang','Kategori','Stok','Satuan','Stok Minimum','Status'],...items.map(i=>[i.code,i.name,i.category,i.qty,i.unit,i.min,status(i)])];const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'}));a.download='laporan-stok-shieces-cafe.csv';a.click();URL.revokeObjectURL(a.href)}
+function drawChart(){const c=$('stockChart');if(!c)return;const rect=c.getBoundingClientRect(),dpr=window.devicePixelRatio||1;c.width=rect.width*dpr;c.height=rect.height*dpr;const x=c.getContext('2d');x.scale(dpr,dpr);const w=rect.width,h=rect.height;const cats=['Bahan Baku','Minuman','Kemasan','Lainnya'];const vals=cats.map(cat=>items.filter(i=>i.category===cat).reduce((s,i)=>s+i.qty,0));const max=Math.max(10,...vals)*1.2;const left=32,bottom=28,top=12,plotH=h-top-bottom,plotW=w-left-10;x.font='10px system-ui';x.fillStyle='#988b7e';x.strokeStyle='#eee6dc';for(let j=0;j<4;j++){const y=top+plotH*j/3;x.beginPath();x.moveTo(left,y);x.lineTo(w-8,y);x.stroke();x.fillText(Math.round(max*(1-j/3)),2,y+3)}const gap=plotW/cats.length,bw=Math.min(34,gap*.45);cats.forEach((cat,i)=>{const bh=vals[i]/max*plotH,xx=left+gap*i+(gap-bw)/2;x.fillStyle='#c79a5b';x.beginPath();x.roundRect(xx,top+plotH-bh,bw,bh,5);x.fill();x.fillStyle='#8b8176';x.textAlign='center';x.fillText(cat,xx+bw/2,h-8)});x.textAlign='left'}
+$('today').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});['inDate','outDate'].forEach(id=>$(id).value=new Date().toISOString().slice(0,10));render();window.addEventListener('resize',drawChart);
+</script>
+</body></html>
